@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container-fluid px-4" style="background-color: rgba(211, 211, 211, 0.171);">
+  <div class="content">
+
+<div class="block">
+    <div class="block-header block-header-default">
+      <h1 class="mt-4">Accounts</h1>
+      <hr>
+    </div>
+    <br><br><br>
+    <div class="d-grid gap-3">
+      <button class="btn btn-primary mb-1 btn-lg" type="button"><a href="{% url 'inwardRemitance' %}" style="text-decoration:none; color:azure;"><h2>Inward Remitance Form</h2></a></button>
+      <button class="btn btn-primary mb-1 btn-lg" type="button"><a href="{% url 'brc' %}" style="text-decoration:none; color:azure;"><h2>Bank Realisation Certificate(BRC) Form</h2></a></button>
+      <button class="btn btn-primary mb-1 btn-lg" type="button"><a href="{% url 'docSubmissionToBank' %}" style="text-decoration:none; color:azure;"><h2>DOC Submission to Bank Form</h2></a></button>
+      <button class="btn btn-primary mb-1 btn-lg" type="button"><a href="{% url 'billForOceanTptCha' %}" style="text-decoration:none; color:azure;"><h2>BILL for Ocean Freight / Container TPT / CHA</h2></a></button>
+    </div>
+
+  </div>
+</div>
+</div>
+
+{% endblock %}

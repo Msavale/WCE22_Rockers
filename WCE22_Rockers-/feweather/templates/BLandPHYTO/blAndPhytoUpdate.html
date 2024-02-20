@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  BL and Phyto Status
+{% endblock title %}
+
+{% block content %}
+<div class="conatiner-fluid px-4">
+    <br>
+    <h1 class="mt-4">
+        <i class="fa fa-users" aria-hidden="true"></i>
+        BL and Phyto Status</h1>
+    <br>
+    <div class="content">
+        <div class="block">
+            <div class="block-content">
+                <div class="row justify-content-start py-20">
+                    <div class="col-xl-6">
+                    </hr>
+                    {% for expd in exportdocs %}
+                    <form class="js-validation-bootstrap" action="{{expd.docid}}" method="post">
+                        {% csrf_token %}
+                        <div class="form-group row">
+                            <label class="col-lg-4 col-form-label">Invoice Number</label>
+                            <div class="col-lg-8">
+                                <input type="text" class="form-control" id="val-empcode" name="invoiceno" value="{{expd.invoiceno}}" disabled>
+                            </div>
+                        </div>
+                        <br>
+                        {% if expd.phytono is not None %}
+                        <div class="form-group row">
+                            <label class="col-lg-4 col-form-label">Phyto Number</label>
+                            <div class="col-lg-8">
+                                <input type="text" class="form-control" id="val-empcode" name="phytonopf" value="{{expd.phytono}}" placeholder="Enter the Phyto Number" disabled>
+                            </div>
+                        </div>
+                        {%else%}
+                        <div class="form-group row">
+                            <label class="col-lg-4 col-form-label">Phyto Number</label>
+                            <div class="col-lg-8">
+                                <input type="text" class="form-control" id="val-empcode" name="phytono" placeholder="Enter the Phyto Number">
+                            </div>
+                        </div>
+                        {%endif%}
+                        <br>
+                        {% if expd.phytodate is not None %}
+                        <div class="form-group row">
+                            <label class="col-lg-4 col-form-label">Phyto Date</label>
+                            <div class="col-lg-8">
+                                <input type="text" class="form-control" id="val-empcode" name="phytodatepf" value="{{expd.phytodate}}" placeholder="Enter the Phyto Date" disabled>
+                            </div>
+                        </div>
+                        {%else%}
+                        <div class="form-group row">
+                            <label class="col-lg-4 col-form-label">Phyto Date</label>
+                            <div class="col-lg-8">
+                                <input type="date" class="form-control" id="val-empcode" name="phytodate" placeholder="Enter the Phyto Date">
+                            </div>
+                        </div>
+                        {%endif%}
+                        <br>
+                        {% if expd.blnumber is not None %}
+                        <div class="form-group row">
+                            <label class="col-lg-4 col-form-label">BL Number</label>
+                            <div class="col-lg-8">
+                                <input type="text" class="form-control" id="val-empcode" name="blnumberpf" value="{{expd.blnumber}}" placeholder="Enter the BL Number" disabled>
+                            </div>
+                        </div>
+                        {%else%}
+                        <div class="form-group row">
+                            <label class="col-lg-4 col-form-label">BL Number</label>
+                            <div class="col-lg-8">
+                                <input type="text" class="form-control" id="val-empcode" name="blnumber" placeholder="Enter the BL Number">
+                            </div>
+                        </div>
+                        {%endif%}
+                        <br>
+                        {% if expd.bldate is not None %}
+                        <div class="form-group row">
+                            <label class="col-lg-4 col-form-label">BL Date</label>
+                            <div class="col-lg-8">
+                                <input type="text" class="form-control" id="val-empcode" name="bldatepf" value="{{expd.bldate}}" placeholder="Enter the BL Date" disabled>
+                            </div>
+                        </div>
+                        {%else%}
+                        <div class="form-group row">
+                            <label class="col-lg-4 col-form-label">BL Date</label>
+                            <div class="col-lg-8">
+                                <input type="date" class="form-control" id="val-empcode" name="bldate" placeholder="Enter the BL Date">
+                            </div>
+                        </div>
+                        {%endif%}
+                        <br>
+                        <button type="submit"class="btn btn-success" value="Submit" style="margin: 1rem;">
+                            <i class="fas fa-save"></i>
+                            <a>Save</a>
+                        </button>
+
+                        <button class="btn btn-danger" style="margin: 1rem;">
+                            <i class="fa fa-times" aria-hidden="true"></i>
+                            <a href="{% url 'blAndPhytoView' %}" style="color: azure;">Cancel</a>
+                        </button>
+                    </form>
+                    {% endfor %}
+                    </hr>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

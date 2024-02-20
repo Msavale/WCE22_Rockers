@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container-fluid px-4" style="background-color: rgba(211, 211, 211, 0.171);">
+  <div class="content">
+
+    <div class="block">
+      <div class="block-header block-header-default">
+        <h1 class="mt-4">Bank Realisation Certificate</h1>
+        <hr>
+      </div>
+      <div class="block-content px-4 py-3" style=" background-color :white;width : 90% ; margin : 3rem 1rem 1rem 5rem;border: 1px solid rgb(255, 255, 255); ">
+        <form class="js-validation-bootstrap" action="" method="POST">
+          {% csrf_token %}
+          <br><br>
+
+
+                <div class="input-group mb-3">
+                  <label class="col-lg-4 col-form-label" for="invoiceNo" style="text-align: center;">
+                    Invoice Number: 
+                  </label>
+                  <select class="form-select" id="invoiceNo" name="invoiceNo" required>
+                    <option value="" default>Please Select InvoiceNo...</option>
+                    {% for invoiceNo in invoiceNos %}
+                    <option value="{{invoiceNo.0}}">{{invoiceNo.0}}</option>
+                    {% endfor %}
+                  </select>
+          </div>
+
+
+          <div class="card-header">
+            <h4>Invoice - BRC Details
+            </h4>
+          </div>
+          <div class="card-body">
+
+
+            <div class="main-form mt-3 border-bottom">
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="form-group mb-2">
+                    <label for="">BRC Number</label>
+                    <input type="text" name="brcNo[]" class="form-control" required placeholder="Enter BRC Number">
+
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group mb-2">
+                    <label for="">BRC Amount: </label>
+                    <input type="number" min="0" step="any" name="amount[]" class="form-control" required placeholder="Enter Amount">
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group mb-2">
+                    <label for="">BRC Date: </label>
+                    <input type="date" name="date[]" class="form-control" required>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+            <div class="paste-new-forms"></div>
+
+
+            <div class="d-grid gap-2 d-md-block">
+              <button type="submit" class="btn btn-success">Save</button>
+              <button class="btn btn-danger"><a href="{% url 'brcTable' %}" style="text-decoration: none; color: azure;"><i class="fa fa-times" aria-hidden="true"></i>&nbspExit</a></button>
+              <br>
+
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block myblock %}
+
+  <script type="text/javascript">
+      $(document).ready(function() {
+
+
+        $(document).on('click', '.remove-btn', function() {
+          $(this).closest('.main-form').remove();
+        });
+
+        $(document).on('click', '.add-more-form', function() {
+          $('.paste-new-forms').append('<div class="main-form mt-3 border-bottom">\
+                  <div class="row">\
+                    <div class="col-md-4">\
+                      <div class="form-group mb-2">\
+                        <label for=""><h5>BRC Number</h5></label>\
+                        <input type="text" name="brcNo[]" class="form-control" required placeholder="Enter BRC Number">\
+                      </div>\
+                    </div>\
+                    <div class="col-md-4">\
+                      <div class="form-group mb-2">\
+                        <label for=""><h5>BRC Amount: </h5></label>\
+                        <input type="number" min="0" step="any" name="amount[]" class="form-control" required placeholder="Enter Amount">\
+                      </div>\
+                    </div>\
+                    <div class="col-md-4">\
+                      <div class="form-group mb-2">\
+                        <label for=""><h5>BRC Date: </h5></label>\
+                        <input type="date" name="date[]" class="form-control" required>\
+                      </div>\
+                    </div>\
+                  <div class="col-md-4">\
+                    <div class="form-group">\
+                      <br>\
+                      <button type="button" name="button" class="btn remove-btn btn-danger">Remove</button>\
+                    </div>\
+                  </div>\
+                </div>');
+        });
+      });
+  </script>
+
+{% endblock myblock %}

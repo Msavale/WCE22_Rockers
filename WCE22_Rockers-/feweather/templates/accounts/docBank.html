@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container-fluid px-4" style="background-color: rgba(211, 211, 211, 0.171);">
+  <div class="content">
+
+    <div class="block">
+      <div class="block-header block-header-default">
+        <h1 class="mt-4">DOC Submission to Bank</h1>
+        <hr>
+      </div>
+      <div class="block-content px-4 py-3" style=" background-color :white;width : 90% ; margin : 3rem 1rem 1rem 5rem;border: 1px solid rgb(255, 255, 255); ">
+        <form class="js-validation-bootstrap" action="" method="POST">
+          {% csrf_token %}
+          <br><br>
+
+          <div class="card-header">
+            <h4>Details
+            </h4>
+          </div>
+          <div class="card-body">
+
+            <div class="main-form mt-3 border-bottom">
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="form-group mb-2">
+                    <label for="">Invoice No</label>
+                    <select class="invoiceNo form-select" name="invoiceNo[]" required>
+                      <option value="" default>Please Select Invoice No...</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div class="form-group mb-2">
+                    <label for="">Date of Submission: </label>
+                    <input type="date" name="date[]" class="form-control" required>
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div class="form-group mb-2">
+                    <label for="">Submitted By: </label>
+                    <input type="text" name="submittedBy[]" class="form-control" required placeholder="Enter ">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="paste-new-forms"></div>
+
+
+            <div class="d-grid gap-2 d-md-block">
+              <button type="submit" class="btn btn-success">Save</button>
+              <button class="btn btn-danger"><a href="{% url 'docBankTable' %}" style="text-decoration: none; color: azure;"><i class="fa fa-times" aria-hidden="true"></i>&nbspExit</a></button>
+            <br>
+
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block myblock %}
+
+  <script type="text/javascript">
+      $(document).ready(function() {
+        addValues();
+
+        $(document).on('click', '.remove-btn', function() {
+          $(this).closest('.main-form').remove();
+        });
+
+        $(document).on('click', '.add-more-form', function() {
+          $('.paste-new-forms').append('<div class="main-form mt-3 border-bottom">\
+                  <div class="row">\
+                    <div class="col-md-4">\
+                      <div class="form-group mb-2">\
+                        <label for="">Invoice No</label>\
+                        <select class="invoiceNo form-select" name="invoiceNo[]" required>\
+                          <option value="" default>Please Select Invoice No...</option>\
+                        </select>\
+                      </div>\
+                    </div>\
+                    <div class="col-md-4">\
+                      <div class="form-group mb-2">\
+                        <label for=""><h5>Date of Submission: </h5></label>\
+                        <input type="date" name="date[]" class="form-control" required>\
+                      </div>\
+                    </div>\
+                    <div class="col-md-4">\
+                      <div class="form-group mb-2">\
+                        <label for=""><h5>Submitted By: </h5></label>\
+                        <input type="text" name="submittedBy[]" class="form-control" required placeholder="Enter ">\
+                      </div>\
+                    </div>\
+                  <div class="col-md-4">\
+                    <div class="form-group">\
+                      <br>\
+                      <button type="button" name="button" class="btn remove-btn btn-danger">Remove</button>\
+                    </div>\
+                  </div>\
+                </div>');
+
+                addValues();
+        });
+      });
+
+      function addValues() {
+
+        $('.invoiceNo').find('option').remove()
+        $('.invoiceNo').append('<option value="" default>Please Select Invoice No...</option>')
+        {%  for current in invoiceNos %}
+          $('.invoiceNo').append('<option value="{{current.0}}">{{current.0}}</option>')
+        {% endfor %}
+
+      }
+  </script>
+
+{% endblock myblock %}

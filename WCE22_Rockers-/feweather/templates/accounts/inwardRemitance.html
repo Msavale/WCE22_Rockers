@@ -1,0 +1,199 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container-fluid px-4" style="background-color: rgba(211, 211, 211, 0.171);">
+  <div class="content">
+
+    <div class="block">
+      <div class="block-header block-header-default">
+        <h1 class="mt-4">Inward Remitance</h1>
+        <hr>
+      </div>
+      <div class="block-content px-4 py-3" style=" background-color :white;width : 90% ; margin : 3rem 1rem 1rem 5rem;border: 1px solid rgb(255, 255, 255); ">
+        <form class="js-validation-bootstrap" action="" method="POST">
+          {% csrf_token %}
+          <br><br>
+          <div class="container">
+            <div class="row align-items-start">
+              <div class="col">
+                <div class="input-group mb-3">
+                  <label class="col-lg-4 col-form-label" for="sender" style="text-align: right;">
+                    Sender: 
+                  </label>
+                  <select class="form-select" id="sender" name="sender" style="margin-left: 10px;" onchange="filterValues()" required>
+                    <option value="" default>Please Select Sender...</option>
+                    {% for party in partyShortName %}
+                    <option value="{{party.0}}">{{party.0}}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+              <div class="col">
+                <div class="input-group mb-3">
+                  <label class="col-lg-4 col-form-label" for="currency" style="text-align: right;">
+                    Currency: 
+                  </label>
+                  <select class="form-select" id="currency" name="currency" style="margin-left: 10px;" required>
+                    <option value="" default>Please Select Currency...</option>
+                    {% for currency in currencies %}
+                    <option value="{{currency.1}}">{{currency.1}}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+              <div class="col">
+                <div class="input-group mb-3">
+                  <label class="col-lg-4 col-form-label" for="forexCur" style="text-align: right;">
+                    Forex Currency:
+                  </label>
+                  <input type="number" step="any" min="0" name="forexCur" style="margin-left: 10px;" required>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+          <br><br>
+
+
+
+
+          <div class="card-header">
+            <h4>Invoice - Amount Details
+            </h4>
+          </div>
+          <div class="card-body">
+
+
+            <div class="main-form mt-3 border-bottom">
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="form-group mb-2">
+                    <label for="">Invoice No</label>
+                    <!-- <input type="text" name="invoiceNo[]" class="invoiceNo form-control" required placeholder="Enter InvoiceNo"> -->
+                    <select class="invoiceNo form-select" name="invoiceNo[]" required>
+                      <option value="" default>Please Select Invoice No...</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group mb-2">
+                    <label for="">Amount</label>
+                    <input type="number" min="0" step="any" name="amount[]" class="form-control" required placeholder="Enter Amount">
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group mb-2">
+                    <label for="">REF</label>
+                    <!-- <input type="text" name="invoiceNo[]" class="invoiceNo form-control" required placeholder="Enter InvoiceNo"> -->
+                    <select class="ref form-select" name="ref[]" required>
+                      <option value="" default>Please Select REF...</option>
+                      <option value="advance">Advance</option>
+                      <option value="final">Final</option>
+                    </select>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+            <div class="paste-new-forms"></div>
+
+
+
+            <div class="row align-items-start">
+              <div class="col">
+                <div class="input-group mb-3 mt-3">
+                  <label class="col-lg-4 col-form-label" for="entryUser" style="text-align: right;">
+                    Submitted By:
+                  </label>
+                  <input type="text" id="entryUser" name="entryUser" style="margin-left: 10px;" placeholder="Enter Your Name Here" required>
+                </div>
+              </div>
+
+              <div class="col">
+                <div class="input-group mb-3 mt-3">
+                  <label class="col-lg-4 col-form-label" for="date" style="text-align: right;">
+                    Date: 
+                  </label>
+                  <input type="date" name="date" style="margin-left: 10px;" required>
+                </div>
+              </div>
+            </div>
+
+            <div class="d-grid gap-2 d-md-block">
+              <button type="submit" class="btn btn-success">Save</button>
+              <button class="btn btn-danger"><a href="{% url 'inwardRemitanceTable' %}" style="text-decoration: none; color: azure;"><i class="fa fa-times" aria-hidden="true"></i>&nbspExit</a></button>
+              <br>
+
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block myblock %}
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    $(document).on('click', '.remove-btn', function() {
+      $(this).closest('.main-form').remove();
+    });
+
+    $(document).on('click', '.add-more-form', function() {
+      $('.paste-new-forms').append('<div class="main-form mt-3 border-bottom">\
+              <div class="row">\
+                <div class="col-md-4">\
+                  <div class="form-group mb-2">\
+                    <label for="">Invoice No</label>\
+                    <select class="invoiceNo form-select" name="invoiceNo[]" required>\
+                      <option value="" default>Please Select Invoice No...</option>\
+                    </select>\
+                  </div>\
+                </div>\
+                <div class="col-md-4">\
+                  <div class="form-group mb-2">\
+                    <label for="">Amount</label>\
+                    <input type="text" name="amount[]" class="form-control" required placeholder="Enter Amount">\
+                  </div>\
+                </div>\
+            <div class="col-md-4">\
+              <div class="form-group mb-2">\
+                <label for="">REF</label>\
+                <select class="ref form-select" name="ref[]" required>\
+                  <option value="" default>Please Select REF...</option>\
+                  <option value="advance">Advance</option>\
+                  <option value="final">Final</option>\
+                </select>\
+              </div>\
+              </div>\
+              <div class="col-md-4">\
+                <div class="form-group">\
+                  <br>\
+                  <button type="button" name="button" class="btn remove-btn btn-danger">Remove</button>\
+                </div>\
+              </div>\
+            </div>');
+
+      filterValues();
+    });
+  });
+
+  function filterValues() {
+
+    selectedParty = document.getElementById("sender").value;
+    console.log("selectedParty  " + selectedParty)
+    $('.invoiceNo').find('option').remove()
+    $('.invoiceNo').append('<option value="" default>Please Select Invoice No...</option>')
+    {%  for current in invoiceAndParty %}
+    if ("{{current.1}}" == selectedParty) {
+      $('.invoiceNo').append('<option value="{{current.0}}">{{current.0}}</option>')
+    }
+    {% endfor %}
+
+  }
+</script>
+
+{% endblock myblock %}

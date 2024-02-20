@@ -1,0 +1,194 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container-fluid px-4" style="background-color: rgba(211, 211, 211, 0.171);">
+  <div class="content">
+
+    <div class="block">
+      <div class="block-header block-header-default">
+        <h1 class="mt-4">Bill For Ocean Freight/ Container TPT/ CHA</h1>
+        <hr>
+      </div>
+      <div class="block-content px-4 py-3" style=" background-color :white;width : 90% ; margin : 3rem 1rem 1rem 5rem;border: 1px solid rgb(255, 255, 255); ">
+        <form class="js-validation-bootstrap" action="" method="POST">
+          {% csrf_token %}
+          <br><br>
+
+          <div class="input-group mb-3">
+            <label class="col-lg-4 col-form-label" for="billType" style="text-align:center;">Bill Type:</label>
+            <select class="form-select" id="billType" name="billType" onchange="fetchSenders()" required>
+              <option value="" default>Please Select Bill Type</option>
+              <option value="Ocean Freight">Ocean Freight</option>
+              <option value="Container TPT">Container TPT</option>
+              <option value="CHA">CHA</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <div class="card-header">
+            <h4>Details</h4>
+          </div>
+
+            <div class="main-form mt-3 border-bottom">
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="form-group mb-2">
+                    <label for="">Container No.</label>
+                    <select class="containerNo form-select" id="containerNo" name="containerNo" onchange="updateValues()" required>
+                      <option value="" default>Please Select Container No...</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div class="form-group mb-2">
+                    <label for="">Invoice No.</label>
+                    <input type="text" name="invoiceNo" value="" class="invoiceNo form-control" value="" readonly>
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div class="form-group mb-2">
+                    <label for="serviceParty">Service Provider Party</label>
+                    <select class="serviceParty form-select" id="serviceParty" name="serviceParty" required>
+                      <option value="" default>Please Select Service provider party</option>
+                    </select>
+                  </div>
+                </div>
+
+
+              </div>
+
+              <div class="otherOption"></div>
+
+
+
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="form-group mb-2">
+                    <label for="invoiceBillNo">Invoice No.(Bill)</label>
+                    <input type="text" name="invoiceBillNo" class="invoiceBillNo form-control" required>
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div class="form-group mb-2">
+                    <label for="amount">Amount</label>
+                    <input type="number" step="any" min="0" name="amount" value="" class="amount form-control" required>
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div class="form-group mb-2">
+                    
+
+                    <label for="">Invoice(Bill) Date:</label>
+                    
+                    <input type="date" name="invDate" value="" class="form-control" required  >
+                    
+                    </script>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="col-md-4">
+              <div class="form-group mb-2">
+                <label for="remark">Remark</label>
+                <textarea name="remark" rows="4" cols="80"></textarea>
+              </div>
+            </div>
+
+            <div class="d-grid gap-2 d-md-block">
+              <button type="submit" class="btn btn-success">Save</button>
+              <button class="btn btn-danger"><a href="{% url 'billOceanTptChaTable' %}" style="text-decoration: none; color: azure;"><i class="fa fa-times" aria-hidden="true"></i>&nbspExit</a></button>
+            <br>
+
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block myblock %}
+
+  <script type="text/javascript">
+      $(document).ready(function() {
+        addValues();
+      });
+
+      function addValues() {
+
+        $('.containerNo').find('option').remove()
+        $('.containerNo').append('<option value="" default>Please Select Container No...</option>')
+        {%  for current in invoiceNos %}
+          $('.containerNo').append('<option value="{{current.1}}">{{current.1}}</option>')
+        {% endfor %}
+
+      }
+
+      function updateValues() {
+        selectedContainer = document.getElementById("containerNo").value;
+
+        {% for export in invoiceNos %}
+        if('{{export.1}}' == selectedContainer){
+          $('.invoiceNo').attr("value", "{{export.0}}");
+        }
+        {% endfor %}
+      }
+
+      function fetchSenders(){
+        billType = document.getElementById("billType").value;
+
+        $('.serviceParty').find('option').remove()
+        $('.serviceParty').append('<option value="" default>Please Select Service provider party</option>')
+
+        otherClass = $(".otherOptionInside")[0]
+        console.log(otherClass)
+        if(billType=="Ocean Freight"){
+          if(otherClass){
+            $('.otherOptionInside').remove()
+          }
+          {% for shippingLineCode in shippingLineCodes %}
+            $('.serviceParty').append('<option value="{{shippingLineCode.0}}">{{shippingLineCode.0}}</option>')
+          {% endfor %}
+
+        }else if (billType=="Container TPT"){
+          if(otherClass){
+            $('.otherOptionInside').remove()
+          }
+          {% for transporter in transporters %}
+            $('.serviceParty').append('<option value="{{transporter.0}}">{{transporter.0}}</option>')
+          {% endfor %}
+        }else if (billType=="CHA"){
+          if(otherClass){
+            $('.otherOptionInside').remove()
+          }
+          {% for chAgent in chAgents %}
+            $('.serviceParty').append('<option value="{{chAgent.0}}">{{chAgent.0}}</option>')
+          {% endfor %}
+        }else if(billType=="Other") {
+
+          $('.serviceParty').find('option').remove()
+          $('.serviceParty').append('<option value="Other" default>Other</option>')
+          $('.otherOption').append('<div class="otherOptionInside col-md-4">\
+            <div class="form-group mb-2">\
+              <label for="serviceParty"><h5>Enter Other Service Name</h5></label>\
+              <input type="text" name="servicePartyOther" value="" class="servicePartyOther form-control" placeholder="Please Enter Service Provider party" required>\
+            </div>\
+          </div>')
+        }else{
+          if(otherClass){
+            $('.otherOptionInside').remove()
+          }
+          $('.serviceParty').find('option').remove()
+          $('.serviceParty').append('<option value="" default>Please Select Service provider party</option>')
+        }
+      }
+  </script>
+
+{% endblock myblock %}
